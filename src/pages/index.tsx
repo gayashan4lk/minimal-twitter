@@ -1,4 +1,4 @@
-import { SignIn, SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 
 import { api } from "~/utils/api";
@@ -17,6 +17,11 @@ export default function Home() {
       </Head>
       <main className=" flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div>{user.isSignedIn ? <SignOutButton /> : <SignInButton />}</div>
+        <div>
+          {user.isSignedIn
+            ? `Hi, ${user.user.firstName} ${user.user.lastName}`
+            : null}
+        </div>
         <div>{hello.data?.greeting}</div>
       </main>
     </>
