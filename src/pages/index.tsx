@@ -4,9 +4,9 @@ import Head from "next/head";
 import { api } from "~/utils/api";
 
 export default function Home() {
-  const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
   const user = useUser();
+
+  const { data } = api.posts.getAll.useQuery();
 
   return (
     <>
@@ -22,7 +22,10 @@ export default function Home() {
             ? `Hi, ${user.user.firstName} ${user.user.lastName}`
             : null}
         </div>
-        <div>{hello.data?.greeting}</div>
+        <div>
+          {data?.length === 0 && <div>No posts yet</div>}
+          {data?.map((post) => <div key={post.id}>{post.content}</div>)}
+        </div>
       </main>
     </>
   );
