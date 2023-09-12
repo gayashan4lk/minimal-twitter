@@ -3,6 +3,26 @@ import Head from "next/head";
 
 import { api } from "~/utils/api";
 
+function CreatePostWizard() {
+  const { user } = useUser();
+
+  if (!user) return null;
+
+  return (
+    <div className="flex w-full gap-3">
+      <img
+        src={user.imageUrl}
+        alt="profile image"
+        className="h-14 w-14 rounded-full"
+      />
+      <input
+        placeholder="Type some emojis!"
+        className="grow bg-transparent outline-none"
+      />
+    </div>
+  );
+}
+
 export default function Home() {
   const user = useUser();
 
@@ -23,17 +43,12 @@ export default function Home() {
         <div className="w-full border-x border-slate-700 md:max-w-2xl">
           <div className="flex border-b border-slate-700 p-4">
             {user.isSignedIn ? (
-              <SignOutButton />
+              <CreatePostWizard />
             ) : (
               <div className="flex justify-center">
                 <SignInButton />
               </div>
             )}
-            <div>
-              {user.isSignedIn
-                ? `Hi, ${user.user.firstName} ${user.user.lastName}`
-                : null}
-            </div>
           </div>
           <div className="flex flex-col">
             {data?.length === 0 && <div>No posts yet</div>}
