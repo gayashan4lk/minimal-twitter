@@ -50,6 +50,7 @@ export default function Home() {
               </div>
             )}
           </div>
+          <div>Test</div>
           <div className="flex flex-col">
             {data?.length === 0 && <div>No posts yet</div>}
             {data?.map((post) => (
