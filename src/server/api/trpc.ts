@@ -8,6 +8,7 @@
  */
 
 import { initTRPC } from "@trpc/server";
+import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -21,6 +22,8 @@ import { prisma } from "~/server/db";
  * These allow you to access things when processing a request, like the database, the session, etc.
  */
 
+type CreateContextOptions = Record<string, never>;
+
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use it, you can export
  * it from here.
@@ -31,7 +34,7 @@ import { prisma } from "~/server/db";
  *
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
-const createInnerTRPCContext = () => {
+const createInnerTRPCContext = (_opts: CreateContextOptions) => {
   return {
     prisma,
   };
@@ -43,8 +46,8 @@ const createInnerTRPCContext = () => {
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = () => {
-  return createInnerTRPCContext();
+export const createTRPCContext = (_opts: CreateNextContextOptions) => {
+  return createInnerTRPCContext({});
 };
 
 /**
@@ -91,18 +94,3 @@ export const createTRPCRouter = t.router;
  * are logged in.
  */
 export const publicProcedure = t.procedure;
-
-/** Reusable middleware that enforces users are logged in before running the procedure. */
-const enforceUserIsAuthed = t.middleware(({ next }) => {
-  return next();
-});
-
-/**
- * Protected (authenticated) procedure
- *
- * If you want a query or mutation to ONLY be accessible to logged in users, use this. It verifies
- * the session is valid and guarantees `ctx.session.user` is not null.
- *
- * @see https://trpc.io/docs/procedures
- */
-export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
