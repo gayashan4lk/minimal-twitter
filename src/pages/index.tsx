@@ -1,8 +1,12 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 import Image from "next/image";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 import { RouterOutputs, api } from "~/utils/api";
+
+dayjs.extend(relativeTime);
 
 function CreatePostWizard() {
   const { user } = useUser();
@@ -16,7 +20,7 @@ function CreatePostWizard() {
         src={user.imageUrl}
         width={64}
         height={64}
-        alt={`profile image of ${user.username}`}
+        alt={`profile image`}
       />
       <input
         placeholder="Type some emojis!"
@@ -38,9 +42,17 @@ function PostView(props: PostWithUser) {
         src={author.imageUrl}
         width={64}
         height={64}
-        alt={`profile image of ${author.name}`}
+        alt={`profile image`}
       />
-      {post.content}
+      <div className="flex flex-col gap-1">
+        <div className="flex flex-row gap-1 text-sm  text-slate-300">
+          <span className="font-semibold">{`@${author.userName}`}</span>
+          <span>·</span>
+          <span>{dayjs(post.createdAt).fromNow()}</span>
+        </div>
+
+        <span>{post.content}</span>
+      </div>
     </div>
   );
 }

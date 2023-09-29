@@ -6,8 +6,10 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 const filterUserForClient = (user: User) => {
   return {
     id: user.id,
-    name: `${user.firstName} ${user.lastName}`,
+    userName: user.username,
     imageUrl: user.imageUrl,
+    firstName: user.firstName,
+    lastName: user.lastName,
   };
 };
 
@@ -17,12 +19,14 @@ export const postsRouter = createTRPCRouter({
       take: 100,
     });
 
-    const users = (
-      await clerkClient.users.getUserList({
-        userId: posts.map((post) => post.authorId),
-        limit: 100,
-      })
-    ).map(filterUserForClient);
+    const clerkUsers = await clerkClient.users.getUserList({
+      userId: posts.map((post) => post.authorId),
+      limit: 100,
+    });
+
+    console.log("Clerk Users", clerkUsers);
+
+    const users = clerkUsers.map(filterUserForClient);
 
     const results = posts.map((post) => {
       const author = users.find((user) => user.id === post.authorId);
@@ -33,13 +37,22 @@ export const postsRouter = createTRPCRouter({
           message: "Author not found",
         });
 
+      if (!author.userName)
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Author username not found",
+        });
+
       return {
         post,
-        author,
+        author: {
+          ...author,
+          userName: author.userName,
+        },
       };
     });
 
-    console.log(results);
+    console.log("Posts with Users", results);
 
     return results;
   }),
