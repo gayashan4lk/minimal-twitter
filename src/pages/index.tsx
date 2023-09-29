@@ -52,9 +52,10 @@ export default function Home() {
           </div>
           <div className="flex flex-col">
             {data?.length === 0 && <div>No posts yet</div>}
-            {data?.map((post) => (
+            {data?.map(({ post, author }) => (
               <div key={post.id} className="border-b border-slate-700 p-8">
                 {post.content}
+                {author?.name}
               </div>
             ))}
           </div>
