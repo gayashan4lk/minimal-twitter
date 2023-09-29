@@ -92,13 +92,18 @@ function PostView(props: PostWithUser) {
         alt={`profile image`}
       />
       <div className="flex flex-col gap-1">
-        <div className="flex flex-row gap-1 text-sm  text-slate-300">
-          <span className="font-semibold">{`@${author.userName}`}</span>
-          <span>·</span>
-          <span>{dayjs(post.createdAt).fromNow()}</span>
+        <div className="flex flex-row items-baseline gap-1 text-slate-300">
+          <span className="font-bold">
+            {`${author.firstName ?? ""} ${author.lastName ?? ""}`}
+          </span>
+          <span className="text-sm font-normal">{`@${author.userName}`}</span>
+          <span className="text-sm font-normal">·</span>
+          <span className="text-sm font-normal">
+            {dayjs(post.createdAt).fromNow()}
+          </span>
         </div>
 
-        <span>{post.content}</span>
+        <span className="text-xl">{post.content}</span>
       </div>
     </div>
   );
