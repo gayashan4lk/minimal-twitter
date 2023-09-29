@@ -1,7 +1,7 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
 
-import { api } from "~/utils/api";
+import { RouterOutputs, api } from "~/utils/api";
 
 function CreatePostWizard() {
   const { user } = useUser();
@@ -19,6 +19,19 @@ function CreatePostWizard() {
         placeholder="Type some emojis!"
         className="grow bg-transparent outline-none"
       />
+    </div>
+  );
+}
+
+type PostWithUser = RouterOutputs["posts"]["getAll"][number];
+
+function PostView(props: PostWithUser) {
+  const { post, author } = props;
+
+  return (
+    <div key={post.id} className="border-b border-slate-700 p-8">
+      {post.content}
+      {author?.name}
     </div>
   );
 }
@@ -53,10 +66,7 @@ export default function Home() {
           <div className="flex flex-col">
             {data?.length === 0 && <div>No posts yet</div>}
             {data?.map(({ post, author }) => (
-              <div key={post.id} className="border-b border-slate-700 p-8">
-                {post.content}
-                {author?.name}
-              </div>
+              <PostView {...{ post, author }} key={post.id} />
             ))}
           </div>
         </div>
