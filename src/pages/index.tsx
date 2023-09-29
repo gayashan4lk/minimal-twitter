@@ -1,5 +1,6 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import Head from "next/head";
+import Image from "next/image";
 
 import { RouterOutputs, api } from "~/utils/api";
 
@@ -10,10 +11,12 @@ function CreatePostWizard() {
 
   return (
     <div className="flex w-full gap-3">
-      <img
-        src={user.imageUrl}
-        alt="profile image"
+      <Image
         className="h-14 w-14 rounded-full"
+        src={user.imageUrl}
+        width={64}
+        height={64}
+        alt={`profile image of ${user.username}`}
       />
       <input
         placeholder="Type some emojis!"
@@ -29,9 +32,15 @@ function PostView(props: PostWithUser) {
   const { post, author } = props;
 
   return (
-    <div key={post.id} className="border-b border-slate-700 p-8">
+    <div key={post.id} className="flex gap-3 border-b border-slate-700 p-4">
+      <Image
+        className="h-14 w-14 rounded-full"
+        src={author.imageUrl}
+        width={64}
+        height={64}
+        alt={`profile image of ${author.name}`}
+      />
       {post.content}
-      {author?.name}
     </div>
   );
 }
