@@ -1,7 +1,12 @@
 import { clerkClient } from "@clerk/nextjs";
 import { User } from "@clerk/nextjs/dist/types/server";
 import { TRPCError } from "@trpc/server";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { z } from "zod";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 const filterUserForClient = (user: User) => {
   return {
@@ -29,8 +34,6 @@ export const postsRouter = createTRPCRouter({
       limit: 100,
     });
 
-    console.log("Clerk Users", clerkUsers);
-
     const users = clerkUsers.map(filterUserForClient);
 
     const results = posts.map((post) => {
@@ -57,8 +60,31 @@ export const postsRouter = createTRPCRouter({
       };
     });
 
-    console.log("Posts with Users", results);
-
     return results;
   }),
+
+  create: privateProcedure
+    .input(
+      z.object({
+        content: z.string().emoji().min(1).max(280),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const authorId = ctx.userId;
+
+      if (!authorId)
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You must be logged in to perform this action.",
+        });
+
+      const post = await ctx.prisma.post.create({
+        data: {
+          authorId,
+          content: input.content,
+        },
+      });
+
+      return post;
+    }),
 });
