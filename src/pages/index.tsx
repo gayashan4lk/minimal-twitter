@@ -5,11 +5,39 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 import { RouterOutputs, api } from "~/utils/api";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 dayjs.extend(relativeTime);
 
+type FormInput = {
+  content: string;
+};
+
 function CreatePostWizard() {
   const { user } = useUser();
+
+  const ctx = api.useContext();
+
+  const { mutate, isLoading } = api.posts.create.useMutation({
+    onSuccess() {
+      ctx.posts.getAll.invalidate();
+      reset();
+    },
+    onError() {
+      reset();
+    },
+  });
+
+  const {
+    reset,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormInput>();
+
+  const onSubmit: SubmitHandler<FormInput> = (data) => {
+    mutate(data);
+  };
 
   if (!user) return null;
 
@@ -22,10 +50,29 @@ function CreatePostWizard() {
         height={64}
         alt={`profile image`}
       />
-      <input
-        placeholder="Type some emojis!"
-        className="grow bg-transparent outline-none"
-      />
+      <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-row">
+        <div className="flex w-full flex-col">
+          <input
+            placeholder="Type some emojis!"
+            className="grow bg-transparent outline-none"
+            {...register("content", {
+              required: {
+                value: true,
+                message: "Type some emojis",
+              },
+            })}
+            defaultValue=""
+          />
+          {errors.content && (
+            <span className="text-sm text-red-500">
+              {errors.content.message}
+            </span>
+          )}
+        </div>
+        <button type="submit" disabled={isLoading} className="justify-end">
+          Post
+        </button>
+      </form>
     </div>
   );
 }
