@@ -20,7 +20,7 @@ function CreatePostWizard() {
 
   const { mutate, isLoading } = api.posts.create.useMutation({
     onSuccess() {
-      ctx.posts.getAll.invalidate();
+      void ctx.posts.getAll.invalidate();
       reset();
     },
     onError() {
@@ -32,7 +32,6 @@ function CreatePostWizard() {
     reset,
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<FormInput>();
 
@@ -51,7 +50,10 @@ function CreatePostWizard() {
         height={64}
         alt={`profile image`}
       />
-      <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-row">
+      <form
+        onSubmit={void handleSubmit(onSubmit)}
+        className="flex w-full flex-row"
+      >
         <div className="flex w-full flex-col">
           <input
             placeholder="Type some emojis!"
