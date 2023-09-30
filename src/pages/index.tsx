@@ -50,10 +50,7 @@ function CreatePostWizard() {
         height={64}
         alt={`profile image`}
       />
-      <form
-        onSubmit={void handleSubmit(onSubmit)}
-        className="flex w-full flex-row"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-row">
         <div className="flex w-full flex-col">
           <input
             placeholder="Type some emojis!"
@@ -61,7 +58,7 @@ function CreatePostWizard() {
             {...register("content", {
               required: {
                 value: true,
-                message: "Type some emojis",
+                message: "Emojis are required",
               },
             })}
             defaultValue=""
