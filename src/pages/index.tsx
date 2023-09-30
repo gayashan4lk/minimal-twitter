@@ -41,6 +41,10 @@ function CreatePostWizard() {
 
   if (!user) return null;
 
+  // to fix the build error, it required to <form onSubmit={void handleSubmit(onSubmit)}>
+  // but then form is not submitted correctly
+  // I think the solution is to make this component a client component
+
   return (
     <div className="flex w-full gap-3">
       <Image
@@ -50,6 +54,7 @@ function CreatePostWizard() {
         height={64}
         alt={`profile image`}
       />
+
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-row">
         <div className="flex w-full flex-col">
           <input
