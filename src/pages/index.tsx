@@ -41,9 +41,11 @@ function CreatePostWizard() {
 
   if (!user) return null;
 
+  // TODO Create a client component
   // to fix the build error, it required to <form onSubmit={void handleSubmit(onSubmit)}>
   // but then form is not submitted correctly
   // I think the solution is to make this component a client component
+  // react-hook-form creates client components, right ??
 
   return (
     <div className="flex w-full gap-3">
