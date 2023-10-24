@@ -22,7 +22,7 @@ export function CreatePostWizard({ user }: Props) {
       await ctx.posts.getAll.invalidate();
       reset();
     },
-    async onError() {
+    onError() {
       reset();
     },
   });
@@ -34,8 +34,13 @@ export function CreatePostWizard({ user }: Props) {
     formState: { errors },
   } = useForm<FormInput>();
 
-  const onSubmit: SubmitHandler<FormInput> = (data) => {
-    mutateAsync(data);
+  const onSubmit: SubmitHandler<FormInput> = async (data) => {
+    try {
+      await mutateAsync(data);
+      reset();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
