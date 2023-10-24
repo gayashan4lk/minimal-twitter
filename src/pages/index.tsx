@@ -28,8 +28,18 @@ export default function Home() {
                 </SignOutButton>
               </>
             ) : (
-              <div className="flex justify-center">
-                <SignInButton />
+              <div className="flex w-full gap-3 ">
+                <div className="flex w-full flex-row">
+                  <h5 className="py-2 text-xl font-bold">
+                    🎉 Welcome to Emoji Twitter
+                  </h5>
+                </div>
+
+                <SignInButton>
+                  <button className="ml-3 rounded-md bg-slate-900 px-3">
+                    LogIn
+                  </button>
+                </SignInButton>
               </div>
             )}
           </div>
