@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { api } from "~/utils/api";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 
 type FormInput = {
   content: string;
@@ -51,7 +51,10 @@ export function CreatePostWizard({ user }: Props) {
         blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8IdP5HgAFvwJu/bU7LAAAAABJRU5ErkJggg=="
       />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-row">
+      <form
+        onSubmit={void handleSubmit(onSubmit)}
+        className="flex w-full flex-row"
+      >
         <div className="flex w-full flex-col">
           <input
             placeholder="Type some emojis!"
