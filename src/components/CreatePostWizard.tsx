@@ -17,12 +17,12 @@ type Props = {
 export function CreatePostWizard({ user }: Props) {
   const ctx = api.useContext();
 
-  const { mutate, isLoading } = api.posts.create.useMutation({
-    onSuccess() {
-      void ctx.posts.getAll.invalidate();
+  const { mutateAsync, isLoading } = api.posts.create.useMutation({
+    async onSuccess() {
+      await ctx.posts.getAll.invalidate();
       reset();
     },
-    onError() {
+    async onError() {
       reset();
     },
   });
@@ -35,7 +35,7 @@ export function CreatePostWizard({ user }: Props) {
   } = useForm<FormInput>();
 
   const onSubmit: SubmitHandler<FormInput> = (data) => {
-    mutate(data);
+    mutateAsync(data);
   };
 
   return (
