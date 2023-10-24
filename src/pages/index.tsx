@@ -18,7 +18,15 @@ export default function Home() {
         <div className="w-full border-x border-slate-700 md:max-w-2xl">
           <div className="flex border-b border-slate-700 p-4">
             {isSignedIn ? (
-              <CreatePostWizard user={user} />
+              <>
+                <CreatePostWizard user={user} />
+
+                <SignOutButton>
+                  <button className="ml-3 rounded-md bg-slate-900 px-3">
+                    Logout
+                  </button>
+                </SignOutButton>
+              </>
             ) : (
               <div className="flex justify-center">
                 <SignInButton />
