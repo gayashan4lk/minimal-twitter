@@ -14,13 +14,15 @@ export function PostView(props: PostWithUser) {
       key={post.id}
       className="flex gap-3 border-b border-slate-700 p-4 hover:bg-[#101010]/30"
     >
-      <Image
-        className="h-10 w-10 rounded-full"
-        src={author.imageUrl}
-        width={64}
-        height={64}
-        alt={`profile image`}
-      />
+      <Link href={`/@${author.userName}`}>
+        <Image
+          className="h-10 w-10 rounded-full"
+          src={author.imageUrl}
+          width={64}
+          height={64}
+          alt={`profile image`}
+        />
+      </Link>
       <div className="flex flex-col gap-1">
         <div className="flex flex-row items-baseline gap-1 text-slate-300">
           <span className="font-bold">

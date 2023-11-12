@@ -1,5 +1,5 @@
-import { useRouter } from "next/router";
 import Head from "next/head";
+import Link from "next/link";
 import superjson from "superjson";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import type {
@@ -7,6 +7,7 @@ import type {
   GetStaticPropsContext,
   InferGetStaticPropsType,
 } from "next";
+
 import { appRouter } from "~/server/api/root";
 import { prisma } from "~/server/db";
 import { api } from "~/utils/api";
@@ -52,6 +53,8 @@ export default function ProfileView(
 
   if (!user) return <div>404</div>;
 
+  const { id, firstName, lastName, imageUrl, userName } = user;
+
   return (
     <>
       <Head>
@@ -60,7 +63,11 @@ export default function ProfileView(
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        Hi. I am {user.firstName} {user.lastName}
+        <Link href="/">Home</Link>
+        <p>
+          First name: {firstName}, Last name: {lastName}, Id: {id}, imageURL:{" "}
+          {imageUrl}, userName: {userName}
+        </p>
       </div>
     </>
   );
