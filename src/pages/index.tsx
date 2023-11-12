@@ -57,3 +57,7 @@ export default function Home() {
     </>
   );
 }
+
+// TODO: Build Post view
+// TODO: Build Profile view
+// TODO: Add frontend validation to create post wizard
