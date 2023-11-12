@@ -36,6 +36,20 @@ export function CreatePostWizard({ user }: Props) {
             toast.error("Failed to create post!");
         }
 
+        const zodError = error.data?.zodError?.fieldErrors?.content;
+        if (zodError) {
+          switch (zodError[0]) {
+            case "content_required":
+              toast.error("Emojis are required!");
+              break;
+            case "Invalid emoji":
+              toast.error("Only enter Emojis!");
+              break;
+            default:
+              toast.error("Failed to create post!");
+          }
+        }
+
         console.error(error.message);
         reset();
       },
