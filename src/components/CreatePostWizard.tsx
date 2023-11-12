@@ -17,15 +17,16 @@ type Props = {
 export function CreatePostWizard({ user }: Props) {
   const ctx = api.useContext();
 
-  const { mutateAsync, isLoading } = api.posts.create.useMutation({
-    async onSuccess() {
-      await ctx.posts.getAll.invalidate();
-      reset();
-    },
-    onError() {
-      reset();
-    },
-  });
+  const { mutateAsync, isLoading, isError, error } =
+    api.posts.create.useMutation({
+      async onSuccess() {
+        await ctx.posts.getAll.invalidate();
+        reset();
+      },
+      onError() {
+        reset();
+      },
+    });
 
   const {
     reset,
