@@ -3,11 +3,16 @@ import Image from "next/image";
 type Props = {
   imageUrl: string;
   size?: number;
+  borderStyles?: string;
 };
-export default function ProfileImage({ imageUrl, size = 48 }: Props) {
+export default function ProfileImage({
+  imageUrl,
+  size = 48,
+  borderStyles,
+}: Props) {
   return (
     <Image
-      className="rounded-full"
+      className={`rounded-full ${borderStyles}`}
       src={imageUrl}
       width={size}
       height={size}
