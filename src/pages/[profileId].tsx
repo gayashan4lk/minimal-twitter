@@ -11,6 +11,7 @@ import type {
 import { appRouter } from "~/server/api/root";
 import { prisma } from "~/server/db";
 import { api } from "~/utils/api";
+import ProfileImage from "~/components/ProfileImage";
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   const helpers = createServerSideHelpers({
@@ -64,6 +65,7 @@ export default function ProfileView(
       </Head>
       <div>
         <Link href="/">Home</Link>
+        <ProfileImage imageUrl={imageUrl} size={128} />
         <p>
           First name: {firstName}, Last name: {lastName}, Id: {id}, imageURL:{" "}
           {imageUrl}, userName: {userName}
