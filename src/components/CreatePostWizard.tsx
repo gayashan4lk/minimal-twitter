@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { api } from "~/utils/api";
 import { type SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 type FormInput = {
   content: string;
@@ -17,15 +18,42 @@ type Props = {
 export function CreatePostWizard({ user }: Props) {
   const ctx = api.useContext();
 
-  const { mutateAsync, isLoading } = api.posts.create.useMutation({
-    async onSuccess() {
-      await ctx.posts.getAll.invalidate();
-      reset();
-    },
-    onError() {
-      reset();
-    },
-  });
+  const { mutateAsync, isLoading, isError, error } =
+    api.posts.create.useMutation({
+      async onSuccess() {
+        await ctx.posts.getAll.invalidate();
+        reset();
+      },
+      onError(error) {
+        switch (error.data?.code) {
+          case "TOO_MANY_REQUESTS":
+            toast.error("Too many requests! Try again later.");
+            break;
+          case "UNAUTHORIZED":
+            toast.error("Unauthorized!");
+            break;
+          default:
+            toast.error("Failed to create post!");
+        }
+
+        const zodError = error.data?.zodError?.fieldErrors?.content;
+        if (zodError) {
+          switch (zodError[0]) {
+            case "content_required":
+              toast.error("Emojis are required!");
+              break;
+            case "Invalid emoji":
+              toast.error("Only enter Emojis!");
+              break;
+            default:
+              toast.error("Failed to create post!");
+          }
+        }
+
+        console.error(error.message);
+        reset();
+      },
+    });
 
   const {
     reset,
