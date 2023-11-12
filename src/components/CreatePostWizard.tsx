@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { api } from "~/utils/api";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import ProfileImage from "~/components/ProfileImage";
 
 type FormInput = {
   content: string;
@@ -18,42 +18,41 @@ type Props = {
 export function CreatePostWizard({ user }: Props) {
   const ctx = api.useContext();
 
-  const { mutateAsync, isLoading, isError, error } =
-    api.posts.create.useMutation({
-      async onSuccess() {
-        await ctx.posts.getAll.invalidate();
-        reset();
-      },
-      onError(error) {
-        switch (error.data?.code) {
-          case "TOO_MANY_REQUESTS":
-            toast.error("Too many requests! Try again later.");
+  const { mutateAsync, isLoading } = api.posts.create.useMutation({
+    async onSuccess() {
+      await ctx.posts.getAll.invalidate();
+      reset();
+    },
+    onError(error) {
+      switch (error.data?.code) {
+        case "TOO_MANY_REQUESTS":
+          toast.error("Too many requests! Try again later.");
+          break;
+        case "UNAUTHORIZED":
+          toast.error("Unauthorized!");
+          break;
+        default:
+          toast.error("Failed to create post!");
+      }
+
+      const zodError = error.data?.zodError?.fieldErrors?.content;
+      if (zodError) {
+        switch (zodError[0]) {
+          case "content_required":
+            toast.error("Emojis are required!");
             break;
-          case "UNAUTHORIZED":
-            toast.error("Unauthorized!");
+          case "Invalid emoji":
+            toast.error("Only enter Emojis!");
             break;
           default:
             toast.error("Failed to create post!");
         }
+      }
 
-        const zodError = error.data?.zodError?.fieldErrors?.content;
-        if (zodError) {
-          switch (zodError[0]) {
-            case "content_required":
-              toast.error("Emojis are required!");
-              break;
-            case "Invalid emoji":
-              toast.error("Only enter Emojis!");
-              break;
-            default:
-              toast.error("Failed to create post!");
-          }
-        }
-
-        console.error(error.message);
-        reset();
-      },
-    });
+      console.error(error.message);
+      reset();
+    },
+  });
 
   const {
     reset,
@@ -73,16 +72,7 @@ export function CreatePostWizard({ user }: Props) {
 
   return (
     <div className="flex w-full gap-3">
-      <Image
-        className="h-14 w-14 rounded-full"
-        src={user.imageUrl}
-        width={64}
-        height={64}
-        alt={`profile image`}
-        priority={false}
-        placeholder="blur"
-        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mO8IdP5HgAFvwJu/bU7LAAAAABJRU5ErkJggg=="
-      />
+      <ProfileImage imageUrl={user.imageUrl} />
 
       <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-row">
         <div className="flex w-full flex-col">

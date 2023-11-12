@@ -16,38 +16,34 @@ export default function Home() {
 
   return (
     <>
-      <main className="flex h-fit justify-center">
-        <div className="w-full border-x border-slate-700 md:max-w-2xl">
-          <div className="flex border-b border-slate-700 p-4">
-            {isSignedIn ? (
-              <>
-                <CreatePostWizard user={user} />
+      <div className="flex border-b border-slate-700 p-4">
+        {isSignedIn ? (
+          <>
+            <CreatePostWizard user={user} />
 
-                <SignOutButton>
-                  <button className="ml-3 rounded-md bg-slate-900 px-3">
-                    Logout
-                  </button>
-                </SignOutButton>
-              </>
-            ) : (
-              <div className="flex w-full gap-3 ">
-                <div className="flex w-full flex-row">
-                  <h5 className="py-2 text-xl font-bold">
-                    🎉 Welcome to Emoji Twitter
-                  </h5>
-                </div>
+            <SignOutButton>
+              <button className="ml-3 rounded-md bg-slate-900 px-3">
+                Logout
+              </button>
+            </SignOutButton>
+          </>
+        ) : (
+          <div className="flex w-full gap-3 ">
+            <div className="flex w-full flex-row">
+              <h5 className="py-2 text-xl font-bold">
+                🎉 Welcome to Emoji Twitter
+              </h5>
+            </div>
 
-                <SignInButton>
-                  <button className="ml-3 rounded-md bg-slate-900 px-3">
-                    LogIn
-                  </button>
-                </SignInButton>
-              </div>
-            )}
+            <SignInButton>
+              <button className="ml-3 rounded-md bg-slate-900 px-3">
+                LogIn
+              </button>
+            </SignInButton>
           </div>
-          <Feed />
-        </div>
-      </main>
+        )}
+      </div>
+      <Feed />
     </>
   );
 }
