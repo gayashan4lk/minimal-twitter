@@ -3,9 +3,17 @@ import Head from "next/head";
 
 import { CreatePostWizard } from "~/components/CreatePostWizard";
 import { Feed } from "~/components/Feed";
+import LoadingSpinner from "~/components/LoadingSpinner";
 
 export default function Home() {
   const { user, isLoaded, isSignedIn } = useUser();
+
+  if (!isLoaded)
+    return (
+      <div className="flex h-screen flex-col items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
 
   return (
     <>
