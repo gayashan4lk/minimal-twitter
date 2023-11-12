@@ -57,3 +57,6 @@ export default function Home() {
     </>
   );
 }
+
+// TODO: Create profile view
+// TODO: Create post view
