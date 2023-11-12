@@ -2,11 +2,17 @@
 
 import { api } from "~/utils/api";
 import { PostView } from "~/components/PostView";
+import LoadingSpinner from "./LoadingSpinner";
 
 export function Feed() {
   const { data: posts, isLoading } = api.posts.getAll.useQuery();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading)
+    return (
+      <div className="mt-10 flex flex-col items-center">
+        <LoadingSpinner size={24} />
+      </div>
+    );
 
   if (!posts) return <div>Something went wrong</div>;
 
