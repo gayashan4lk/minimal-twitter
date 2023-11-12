@@ -2,6 +2,7 @@ import Image from "next/image";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { type RouterOutputs } from "~/utils/api";
+import Link from "next/link";
 
 dayjs.extend(relativeTime);
 type PostWithUser = RouterOutputs["posts"]["getAll"][number];
@@ -25,11 +26,15 @@ export function PostView(props: PostWithUser) {
           <span className="font-bold">
             {`${author.firstName ?? ""} ${author.lastName ?? ""}`}
           </span>
-          <span className="text-sm font-normal">{`@${author.userName}`}</span>
+          <Link href={`/@${author.userName}`}>
+            <span className="text-sm font-normal">{`@${author.userName}`}</span>
+          </Link>
           <span className="text-sm font-normal">·</span>
-          <span className="text-sm font-normal">
-            {dayjs(post.createdAt).fromNow()}
-          </span>
+          <Link href={`/post/${post.id}`}>
+            <span className="text-sm font-normal">
+              {dayjs(post.createdAt).fromNow()}
+            </span>
+          </Link>
         </div>
 
         <span className="text-xl">{post.content}</span>
