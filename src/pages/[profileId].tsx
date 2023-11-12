@@ -46,19 +46,11 @@ export default function ProfileView(
 ) {
   const { profileId } = props;
 
-  const {
-    data: user,
-    isLoading,
-    isError,
-  } = api.profile.getUserByUserName.useQuery({
+  const { data: user } = api.profile.getUserByUserName.useQuery({
     userName: profileId,
   });
 
-  console.log(user);
-
-  if (isLoading) return <div>Loading</div>;
-
-  if (isError) return <div>Error occurred!</div>;
+  if (!user) return <div>404</div>;
 
   return (
     <>
