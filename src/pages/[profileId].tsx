@@ -17,6 +17,8 @@ export default function ProfileView() {
     userName: profileId!.slice(1).toString(),
   });
 
+  console.log(user);
+
   if (isLoading) return <div>Loading</div>;
 
   if (isError) return <div>Error occured</div>;
