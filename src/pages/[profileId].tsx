@@ -102,7 +102,7 @@ export default function ProfileView(
           </h1>
           <h4 className="text-slate-400">{`@${userName}`}</h4>
         </div>
-        <Feed />
+        <Feed id={id} />
       </>
     </>
   );
