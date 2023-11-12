@@ -87,7 +87,7 @@ export default function ProfileView(
           </h1>
         </div>
         <div className="relative">
-          <div className="mb-[64px] flex h-[130px] bg-emerald-600"></div>
+          <div className="mb-[64px] flex h-[130px] bg-gradient-to-tr from-sky-500 to-indigo-700"></div>
           <div className="absolute bottom-[-64px] pl-5">
             <ProfileImage
               imageUrl={imageUrl}
